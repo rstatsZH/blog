@@ -71,6 +71,8 @@ ehedaten_tidy <- ehedaten %>%
 
 ## Daten visualisieren
 
+### Plot für ZHWeb Mitteilung
+
 **Titel:** Ehedaten Kanton Zürich 16. bis 18. Jahrhundert  
 **Untertitel:** Dienstage im Februar und November als beliebteste Tage in diesem Zeitraum  
 **Quelle:** https://opendata.swiss/de/dataset/ehedaten-kanton-zurich-16-bis-18-jahrhundert    
@@ -78,6 +80,13 @@ ehedaten_tidy <- ehedaten %>%
 **Alternativtext:** Verbundenes Streudiagramm (Punkt-Liniendiagramm) mit Monaten (Januar bis Dezember) auf der horizontalen Achse. Anzahl Verheiratungen pro Monat auf der vertikalen Achse. Die Wochentage sind farblich unterschieden. Für jeden Wochentag wurde ein verbundenes Streudiagramm erstellt. Das Total reicht von etwa konstanten 1000 Verheiratungen an an einem Mittwoch gefolgt von konstanten etwa 2000 Verheiratungen an Freitagen bis hin zu 10'000 Verheiratungen an einem Dienstag im Februar. Gefolgt vom Dienstag ist der Samstag mit etwa 7'000 Verheiratungen an einem Dienstag im Februar und einem ähnlichen Verlauf über das Jahr. Gefolgt vom Febraur ist der November der zweithäufigste Monat für Verheiratungen.  
 
 ```{r}
+
+# Passende Einstellungen für's ZH Web
+
+pixel = 1152
+my_dpi = 300 
+
+# Plot für die Mitteilung
 
 ehedaten_tidy %>% 
   count(monat, wochentag) %>% 
@@ -95,18 +104,47 @@ ehedaten_tidy %>%
   scale_y_continuous(limits = c(0, 11000), breaks = seq(0, 10000, 2000)) +
   theme_minimal(base_size = 14) 
 
-# Plot speichern
 
-pixel = 1152
-my_dpi = 300 
-
-ggsave(here::here("plots/blog-01-plot-anzahl-verheiratungen.png"), 
+ggsave(here::here("plots/blog-01-plot-mitteilung-anzahl-verheiratungen.png"), 
        width = pixel*2.5/my_dpi,   
        height = pixel*1.5/my_dpi,
        units = "in",
        dpi = my_dpi)
 
 
-  
 
 ```
+
+### Plot für das Intranet
+
+
+```{r}
+
+# Plot Intranet mit labels im Plot
+
+ehedaten_tidy %>% 
+  count(monat, wochentag) %>% 
+  ggplot(aes(x = monat, y = n, color = wochentag, group = wochentag)) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  geom_path(alpha = 0.5) +
+  labs(title = "Ehedaten Kanton Zürich 16. bis 18. Jahrhundert",
+       subtitle =  "Dienstage im Februar und November als beliebteste Tage in diesem Zeitraum",
+       caption = "Datenbezug: https://opendata.swiss/de/dataset/ehedaten-kanton-zurich-16-bis-18-jahrhundert",
+       y = "Anzahl Verheiratungen",
+       x = "Monat",
+       color = "Wochentag") +
+  scale_color_manual(values = zhpal$zhdiagonal) + 
+  #scale_color_brewer(type = "qual", palette = 2) +
+  scale_y_continuous(limits = c(0, 11000), breaks = seq(0, 10000, 2000)) +
+  theme_minimal(base_size = 14) 
+
+
+ggsave(here::here("plots/blog-01-plot-intranet-anzahl-verheiratungen.png"), 
+       width = pixel*2.5/my_dpi,   
+       height = pixel*1.5/my_dpi,
+       units = "in",
+       dpi = my_dpi)
+
+
+```
+
