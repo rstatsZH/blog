@@ -13,6 +13,13 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
+
+
+# Ein Package des Statistischen Amts, Kanton Zürich
+# Für Farbpalette installieren
+
+# devtools::install_github("statistikZH/statR", ref="dev")
+
 library(statR)
 
 ```
@@ -99,7 +106,7 @@ ehedaten_tidy %>%
        y = "Anzahl Verheiratungen",
        x = "Monat",
        color = "Wochentag") +
-  scale_color_manual(values = zhpal$zhdiagonal) + 
+  scale_color_manual(values = zhpal$zhdiagonal) +  # Farbpalette aus statR Package
   #scale_color_brewer(type = "qual", palette = 2) +
   scale_y_continuous(limits = c(0, 11000), breaks = seq(0, 10000, 2000)) +
   theme_minimal(base_size = 14) 
@@ -133,7 +140,7 @@ ehedaten_tidy %>%
        y = "Anzahl Verheiratungen",
        x = "Monat",
        color = "Wochentag") +
-  scale_color_manual(values = zhpal$zhdiagonal) + 
+  scale_color_manual(values = zhpal$zhdiagonal) +  # Farbpalette aus statR Package
   #scale_color_brewer(type = "qual", palette = 2) +
   scale_y_continuous(limits = c(0, 11000), breaks = seq(0, 10000, 2000)) +
   theme_minimal(base_size = 14) 
